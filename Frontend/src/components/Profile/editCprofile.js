@@ -1,16 +1,15 @@
 import React, {Component} from 'react';
 import '../../App.css';
 import axios from 'axios';
-import cookie from 'react-cookies';
-import {Redirect} from 'react-router';
 import Banner from '../Navigationbar/banner'
 import {Button} from 'react-bootstrap'
 import ImageUploader from 'react-images-upload';
-import { ThemeConsumer } from 'react-bootstrap/esm/ThemeProvider';
 import backendServer from "../../webConfig"
-import { connect } from 'react-redux';
-import PropTypes from 'prop-types'
-import {editCProfile} from '../../actions/editProfile'
+import { graphql } from 'react-apollo';
+import { editCprofile } from '../../mutation/mutations';
+import {getCustomerProfileBasic} from '../../queries/queries'
+import { withApollo } from 'react-apollo';
+import { compose } from 'recompose';
 
 
 
@@ -34,17 +33,15 @@ class EditcProfile extends Component {
         window.location = '/cprofile'
    }
 
-componentWillMount() {
-    axios.get(`/profile/customer/${localStorage.getItem("user_id")}`)
-    .then(response => 
-        {console.log(response.data)
-            this.setState({
-                profileBasic: response.data,
-                profileAdv: response.data.profileInfo
-                
-            }); 
-        })
-        
+componentWillMount = async ()=> {
+    const { data } = await this.props.client.query({
+        query: getCustomerProfileBasic,
+            variables: { id: localStorage.getItem("user_id") },
+            fetchPolicy: 'network-only',
+      });
+      console.log(data)
+      this.setState({profileBasic: data.customer})
+      this.setState({profileAdv: data.customerProfile})
 
 }
 onImageChange = (e) => {
@@ -76,44 +73,48 @@ onUpload = (e) => {
         });
 }
 
-    updateProfile = (e) => {
-        //prevent page from refresh
+    updateProfile = async(e) => {
         e.preventDefault();
-        var proBasic = this.state.profileBasic;
-        var proAdv = this.state.profileAdv;
-        delete proBasic.profileInfo;
-        // delete proAdv._id
-        var details = Object.assign(proBasic, proAdv)
-        const data = {
-            fname: this.state.fname || details.fname,
-            lname: this.state.lname || details.lname,
-            gender: this.state.gender || details.gender,
-            headline: this.state.headline || details.headline,
-            city: this.state.city || details.city,
-            email: this.state.email || details.email,
-            zipcode: this.state.zipcode || details.zipcode,
-            address: this.state.address || details.address,
-            contact: this.state.contact || details.contact,
-            nickname: this.state.nickname || details.nickname,
-            yelptime: this.state.yelptime || details.yelptime,
-            hobbies: this.state.hobbies || details.hobbies,
-            about: this.state.about || details.about,
-            social: this.state.social || details.social,
-            picture: this.state.pictures
-  
+        console.log(localStorage.getItem("user_id"))
+        let details = Object.assign(this.state.profileBasic, this.state.profileAdv)
+        let mutationResponse = await this.props.editCprofile({
+            variables: {
+                _id: localStorage.getItem("user_id"),
+                fname: this.state.fname || details.fname,
+                lname: this.state.lname || details.lname,
+                gender: this.state.gender || details.gender,
+                headline: this.state.headline || details.headline,
+                city: this.state.city || details.city,
+                email: this.state.email || details.email,
+                zipcode: this.state.zipcode || details.zipcode,
+                address: this.state.address || details.address,
+                contact: this.state.contact || details.contact,
+                nickname: this.state.nickname || details.nickname,
+                yelptime: this.state.yelptime || details.yelptime,
+                hobbies: this.state.hobbies || details.hobbies,
+                about: this.state.about || details.about,
+                social: this.state.social || details.social,
+            }
+        });
+        let response = mutationResponse.data.editCprofile;
+        if (response) {
+            console.log(response)
+            if (response.status === "200") {
+                this.setState({
+                    success: true,
+                    data: response.message,
+                    loginFlag: true
+                });
+            } else {
+                console.log(response)
+                this.setState({
+                    message: response.message,
+                    loginFlag: true
+                });
+            }
         }
-        this.props.editCProfile(data)
-        // axios.post(`${backendServer}/customer/editProfile/${localStorage.getItem("user_id")}`, data)
-        // .then(response => {
-        //     this.setState({
-        //         msg: (response.data)
-        //     });
-        // })
     }
     render(){
-        console.log(this.state.pictures[0])
-        console.log(this.state.file)
-        console.log(this.state.fileText)
         const error = {
             message: null
         }
@@ -121,15 +122,11 @@ onUpload = (e) => {
             message: null
         }
 
-        var proBasic = this.state.profileBasic;
-        var proAdv = this.state.profileAdv;
-        delete proBasic.profileInfo;
-        // delete proAdv._id
-        var details = Object.assign(proBasic, proAdv)
-        let message = this.props.description;
+        let details = Object.assign(this.state.profileBasic, this.state.profileAdv)
+        let message = this.state.data;
         if(message == 'USER_UPDATED'){
             success.message = 'Successfully updated the user.'
-            setTimeout(function() {window.location = '/cprofile'}, 5000);
+            setTimeout(function() {window.location = '/cprofile'}, 1000);
         }
         return(
             <div>
@@ -243,14 +240,8 @@ onUpload = (e) => {
         )
     }
 }
-EditcProfile.propTypes = {
-    editCProfile: PropTypes.func.isRequired,
-    description: PropTypes.object.isRequired
-  }
-  
-  const mapStateToProps = state => { 
-    return ({
-        description: state.edit.description
-  })};
-  
-  export default connect(mapStateToProps, { editCProfile })(EditcProfile);
+
+  export default compose(
+    withApollo,
+    graphql(editCprofile, { name: "editCprofile" })   
+  )(EditcProfile);

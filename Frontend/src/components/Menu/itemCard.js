@@ -9,7 +9,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types'
 import {addItemCart} from '../../actions/menu'
 import { withApollo } from 'react-apollo';
-
+import foodPlaceholder from './foodplaceholder.jpg'
 
 class ItemCard extends Component {
   constructor(props) {
@@ -65,7 +65,7 @@ class ItemCard extends Component {
       <Card bg="white" style={{ width: "50rem", margin: "2%" }}>
         <Row>
           <Col>
-            <Card.Img style={{ width: "15rem", height: "15rem" }} src={imageSrc} />
+            <Card.Img style={{ width: "15rem", height: "15rem" }} src={foodPlaceholder} />
           </Col>
           <Col align="left" style={{marginLeft:"0mm"}}>
             <Card.Body>

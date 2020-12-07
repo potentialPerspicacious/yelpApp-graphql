@@ -76,9 +76,65 @@ query($id: String){
 }
 `;
 
+const fetchReviews = gql`
+query($id: String){
+    review_list(id: $id){
+        reviews{
+            review_description
+            rating
+            review_by
+    }
+}
+}
+`;
+
+const getCustomerProfileBasic = gql`
+query($id: String){
+    customer(id: $id){
+        _id
+        fname
+        lname
+        email
+        zipcode
+        month
+        date
+        year
+    }
+
+    customerProfile(id: $id){
+        address
+        contact
+        gender
+        headline
+        city
+        nickname
+        yelptime
+        hobbies
+        about
+        social
+    }
+
+}
+`;
+
+const getRestaurants = gql`
+query($name: String){
+    searchRestaurant(name: $name){
+        _id
+        name
+        zipcode
+        city
+    }
+
+}
+`;
+
 export { getRestaurantProfileBasic,
     getMenu,
     getRorders,
-    getDish
+    getDish,
+    fetchReviews,
+    getCustomerProfileBasic,
+    getRestaurants
 
     };

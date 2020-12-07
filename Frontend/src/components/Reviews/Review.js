@@ -3,6 +3,8 @@ import { Container, Alert } from "react-bootstrap";
 import axios from "axios";
 import ReviewCard from "./reviewCard";
 import backendServer from "../../webConfig"
+import { withApollo } from 'react-apollo';
+import {fetchReviews} from '../../queries/queries'
 
 class Review extends Component {
     constructor(props) {
@@ -17,15 +19,16 @@ class Review extends Component {
     }
 
 
-    getReviews = () => {
+    getReviews = async () => {
         if (localStorage.getItem("isOwner")==='on'){
-        axios.get(`${backendServer}/restaurant/getReviews/${localStorage.getItem("user_id")}`)
-            .then(response => {
-                    this.setState({
-                        review_items: this.state.review_items.concat(response.data),
-                        status: (response.data[0])
-                    });
-            })
+            const { data } = await this.props.client.query({
+                query: fetchReviews,
+                    variables: { id: localStorage.getItem("user_id") },
+                    fetchPolicy: 'network-only',
+              });
+              console.log((data.review_list))
+              this.state.review_items = []
+              this.setState({review_items: this.state.review_items.concat(data.review_list.reviews)})
         } else {
             axios.get(`${backendServer}/restaurant/getReviews/${localStorage.getItem("resID")}`)
             .then(response => {
@@ -44,7 +47,7 @@ class Review extends Component {
         if (this.state && this.state.review_items && this.state.review_items.length > 0) {
             items = this.state.review_items
             if (items.length > 0) {
-                for (var i = 1; i < items.length; i++) {
+                for (var i = 0; i < items.length; i++) {
                     item = <ReviewCard review_items={items[i]} deleteItem={this.deleteItem}/>;
                     itemsRender.push(item);
                 }
@@ -56,8 +59,7 @@ class Review extends Component {
         let message = null,
             section,
             renderOutput = [];
-        console.log(this.state.status)
-        if (this.state.status === 'REVIEW_PRESENT') {
+        if (this.state.review_items.length>1) {
             if (this.state && this.state.review_items && this.state.review_items.length > 0) {
                 section = this.reviews(this.state.review_items);
                 renderOutput.push(section);
@@ -76,4 +78,4 @@ class Review extends Component {
     }
 }
 
-export default Review;
+export default withApollo(Review);

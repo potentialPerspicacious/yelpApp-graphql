@@ -6,6 +6,7 @@ import { withApollo } from 'react-apollo';
 import {updateOrder} from '../../mutation/mutations'
 import { compose } from 'recompose';
 import { graphql } from 'react-apollo';
+import ordersPlaceholder from './orderplaceholder.jpg'
 
 
 class RHistoryCard extends Component {
@@ -71,7 +72,7 @@ render() {
 <Card bg="white" style={{ width: "60rem", margin: "2%", height:"21rem" }}>
         <Row>
           <Col xs="4.5">
-            <Card.Img style={{marginLeft:"4mm", width: "15rem", height: "21rem" }} src="" />
+            <Card.Img style={{marginLeft:"4mm", width: "15rem", height: "21rem" }} src={ordersPlaceholder} />
           </Col>
           <Col align="left" style={{marginLeft:"0mm"}}>
             <Card.Body>

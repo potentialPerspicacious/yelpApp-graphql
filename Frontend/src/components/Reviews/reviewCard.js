@@ -18,8 +18,8 @@ render() {
               <br />
               <br />
               <Card.Text><small style={{color:"gray"}}>Reviewd by: <span style={{textTransform:"uppercase"}}>
-        {this.props.review_items.fname} </span></small> 
-        <span style={{marginLeft:"2.5cm"}}>
+        {this.props.review_items.review_by} </span></small> 
+        <span style={{marginLeft:"2cm"}}>
           <small style={{color:"gray"}}>
             Rating: {this.props.review_items.rating}/5
           </small>

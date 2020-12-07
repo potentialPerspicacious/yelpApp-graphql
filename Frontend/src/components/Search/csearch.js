@@ -10,6 +10,8 @@ import { faSearch, faNewspaper, faIdCard } from "@fortawesome/free-solid-svg-ico
 import ResCard from './resCard'
 import Maps from '../Maps/maps'
 import backendServer from "../../webConfig"
+import { withApollo } from 'react-apollo';
+import {getRestaurants} from '../../queries/queries'
 
 
 
@@ -27,7 +29,7 @@ class Csearch extends Component {
     this.getRestaurants();
 
    }
-   getRestaurants = () => {
+   getRestaurants = async() => {
 
     if(localStorage.getItem("filter") !=='no_filter'){
         axios.get(`${backendServer}/search/restaurantsFilter/${localStorage.getItem("find")}/${localStorage.getItem("location")}/${localStorage.getItem("filter")}/${localStorage.getItem("search")}`)
@@ -38,13 +40,19 @@ class Csearch extends Component {
                 });
         })
     } else {
-    axios.get(`${backendServer}/search/restaurants/${localStorage.getItem("find")}/${localStorage.getItem("location")}/${localStorage.getItem("search")}`)
-        .then(response => {
-                this.setState({
-                    restaurant_search: this.state.restaurant_search.concat(response.data),
+    // axios.get(`${backendServer}/search/restaurants/${localStorage.getItem("find")}/${localStorage.getItem("location")}/${localStorage.getItem("search")}`)
+    //     .then(response => {
+    //             this.setState({
+    //                 restaurant_search: this.state.restaurant_search.concat(response.data),
 
-                });
-        })
+    //             });
+    //     })
+    const { data } = await this.props.client.query({
+        query: getRestaurants,
+            variables: { name: localStorage.getItem("find")},
+            fetchPolicy: 'network-only',
+      });
+      console.log(data)
     }
 };
 restaurants = () => {
@@ -176,7 +184,7 @@ clearFilters = (e) => {
                     <div style={{marginLeft: "10px"}}>
                         <h4 style={{color:'Gray'}}> Maps</h4>
                         <hr />
-                        <Maps />
+                        {/* <Maps /> */}
                 
                     </div>
                 </div>
@@ -186,4 +194,4 @@ clearFilters = (e) => {
    }
 }
 
-export default Csearch
+export default withApollo(Csearch)

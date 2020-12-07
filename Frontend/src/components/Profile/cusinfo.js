@@ -6,8 +6,9 @@ import {faCamera, faEdit, faIdCard, faPhoneAlt, faGenderless, faAddressCard, faB
 import { CardImg, Card } from "react-bootstrap";
 import Banner from '../Navigationbar/banner';
 import backendServer from "../../webConfig"
-
-
+import {getCustomerProfileBasic} from '../../queries/queries'
+import {withApollo } from 'react-apollo';
+import userImage from './userplaceholder.png'
 
 
 class Cusinfo extends Component {
@@ -20,16 +21,26 @@ class Cusinfo extends Component {
         };
     }
 
-    componentWillMount() {
+    componentWillMount = async () => {
         if (localStorage.getItem("isOwner")=== "off"){
-        axios.get(`/profile/customer/${localStorage.getItem("user_id")}`)
-        .then(response => 
-            {this.setState({
-                profileBasic: response.data,
-                profileAdv: response.data.profileInfo 
+        // axios.get(`/profile/customer/${localStorage.getItem("user_id")}`)
+        // .then(response => 
+        //     {this.setState({
+        //         profileBasic: response.data,
+        //         profileAdv: response.data.profileInfo 
                     
-                }); 
-            })
+        //         }); 
+        //     })
+        const { data } = await this.props.client.query({
+            query: getCustomerProfileBasic,
+                variables: { id: localStorage.getItem("user_id") },
+                fetchPolicy: 'network-only',
+          });
+          console.log(data)
+          this.setState({profileBasic: data.customer})
+          this.setState({profileAdv: data.customerProfile})
+
+
         } else if (localStorage.getItem("isOwner")=== "on"){
             axios.get(`/profile/customer/${localStorage.getItem("cusID")}`)
             .then(response => 
@@ -42,11 +53,7 @@ class Cusinfo extends Component {
         }
     }
     render(){
-        var proBasic = this.state.profileBasic;
-        var proAdv = this.state.profileAdv;
-        delete proBasic.profileInfo;
-        // delete proAdv._id
-        var details = Object.assign(proBasic, proAdv, proBasic.image)
+        let details = Object.assign(this.state.profileBasic, this.state.profileAdv)
         let edit = null
         var imageSrc;
         if (this.state) {
@@ -74,7 +81,7 @@ class Cusinfo extends Component {
                 <Banner />
             <div style={{marginTop:"0cm"}}>
                     <div class='row'>
-                            <CardImg style={{marginLeft: "1cm", width: "6cm", height:"6cm"}} variant="left" src={imageSrc} alt="IMG">
+                            <CardImg style={{marginLeft: "1cm", width: "6cm", height:"6cm"}} variant="left" src={userImage} alt="IMG">
                             </CardImg>
                         <div class='col-xs-4' style={{marginTop: "2cm", marginLeft: "2cm"}}>
         <h3 className='at'>{details.fname}  {details.lname}</h3>
@@ -130,4 +137,4 @@ class Cusinfo extends Component {
     }
 
 
-export default Cusinfo
+export default withApollo(Cusinfo)

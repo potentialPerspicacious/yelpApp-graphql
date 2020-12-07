@@ -14,9 +14,13 @@ const login = async (args) => {
                 return{status: 200, message: "Invalid User"}
             }
     } else if (args.isOwner === 'off'){
-        let result = customer.findOne({email: args.email, password: args.password})
+        let result = await customer.findOne({email: args.email, password: args.password})
         if(result) {
-
+            token = "Successful Login" + "SecretSplitHere" + result._id
+                
+            return{status: 200, message: token}
+        }else {
+            return{status: 200, message: "Invalid User"}
         }
     }
 }

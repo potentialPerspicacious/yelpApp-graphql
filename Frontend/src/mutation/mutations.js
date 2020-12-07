@@ -46,10 +46,24 @@ const updateOrder = gql`
         }
     }
 `
+
+const editCprofile = gql`
+    mutation editCprofile($_id: String, $email: String, $fname: String,  $zipcode: String, $lname: String, $contact: String,
+        $gender: String, $city: String, $headline: String, $address: String, $nickname: String, $yelptime: String, $hobbies: String, $about: String,
+        $social: String ){
+            editCprofile(_id: $_id, email: $email, fname: $fname, zipcode: $zipcode, lname: $lname, contact: $contact,
+            gender: $gender, city: $city, headline: $headline address: $address, nickname: $nickname, yelptime: $yelptime, hobbies: $hobbies, about: $about,
+            social: $social){
+            message
+            status
+        }
+    }
+`
 export {
     loginMutation,
     editRprofile,
     addMenuItem,
     editMenuItem,
-    updateOrder
+    updateOrder,
+    editCprofile
     };

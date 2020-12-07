@@ -1,10 +1,7 @@
 import React, {Component} from 'react';
 import '../../App.css';
 import axios from 'axios';
-import cookie from 'react-cookies';
-import {Redirect} from 'react-router';
 import Banner from '../Navigationbar/banner'
-import TimePicker from 'react-bootstrap-time-picker';
 import ImageUploader from 'react-images-upload';
 import {Button} from 'react-bootstrap'
 import backendServer from "../../webConfig"

@@ -1,7 +1,4 @@
 const graphql = require('graphql');
-const Users = require('../models/UserModel.js');
-const restaurant = Users.restaurant;
-const customer = Users.customer;
 const RestaurantProfile = require('../models/RestaurantProfileModel')
 const MenuModel = require('../models/MenuModel')
 const Orders = require('../models/OrdersModel.js');
@@ -9,8 +6,7 @@ const { login } = require('../mutations/login');
 const {editRprofile} = require('../mutations/editRprofile')
 const {addItem} = require ('../mutations/addItem')
 const {editMenuItem} = require('../mutations/editItem')
-const { ProvidedRequiredArgumentsOnDirectivesRule } = require('graphql/validation/rules/ProvidedRequiredArgumentsRule');
-const { resolve } = require('path');
+const {updateOrder} = require('../mutations/updateOrder')
 
 const {
     GraphQLObjectType,
@@ -252,6 +248,18 @@ const Mutation = new GraphQLObjectType({
             },
             resolve(parent, args) {
                 return editMenuItem(args);
+            }
+        },
+        updateOrder: {
+            type: StatusType,
+            args: {
+                _id: { type: GraphQLString },
+                ordermode: { type: GraphQLString },
+                orderstatus: {type: GraphQLString}
+
+            },
+            resolve(parent, args) {
+                return updateOrder(args);
             }
         },
     }

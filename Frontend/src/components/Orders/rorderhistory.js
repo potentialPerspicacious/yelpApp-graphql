@@ -2,12 +2,10 @@ import { faBuilding, faCar, faClock, faHourglass, faList, faShoppingBag } from "
 import React, { Component} from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Card, Row, Col, Button } from "react-bootstrap";
-import axios from 'axios'
-import backendServer from "../../webConfig"
-import { connect } from 'react-redux';
-import PropTypes from 'prop-types'
-import {updateRorder} from '../../actions/orders'
 import { withApollo } from 'react-apollo';
+import {updateOrder} from '../../mutation/mutations'
+import { compose } from 'recompose';
+import { graphql } from 'react-apollo';
 
 
 class RHistoryCard extends Component {
@@ -15,7 +13,7 @@ class RHistoryCard extends Component {
         super(props);
         this.state = {
             value: this.props.order_history.orderstatus,
-            value2: this.props.order_history.ordertype
+            value2: this.props.order_history.ordermode
             }
     }
 
@@ -31,31 +29,42 @@ onChange2 = (e) => {
         localStorage.setItem("cusID", this.props.order_history.cusID)
     }
 
-updateOrder = (e) => {
+updateOrder = async (e) => {
     e.preventDefault();
-    const data = {
-        // user_id: localStorage.getItem("user_id"),
-        orderID: this.props.order_history.idorderhistory,
-        orderStatus: this.state.value,
-        orderType: this.state.value2,
+    let mutationResponse = await this.props.updateOrder({
+        variables: {
+            _id: this.props.order_history._id,
+            orderstatus: this.state.value,
+            ordermode: this.state.value2,
+        }
+    });
+    let response = mutationResponse.data.updateOrder;
+    if (response) {
+        console.log(response)
+        if (response.status === "200") {
+            this.setState({
+                success: true,
+                data: response.message,
+                loginFlag: true
+            });
+        } else {
+            console.log(response)
+            this.setState({
+                message: response.message,
+                loginFlag: true
+            });
+        }
     }
-    this.props.updateRorder(data)
-    // axios.post(`${backendServer}/restaurant/updateOrder`, data)
-    // .then(response => {
-    //     this.setState({
-    //         msg: (response.data)
-    //     });
-    // })
 }
 render() {
     console.log(this.props.order_history)
-    let message = this.props.description
+    let message = this.state.data
     let success = {
         message: null
     }
     if(message == 'ORDER_UPDATED'){
         success.message = 'Successfully updated the order.'
-        setTimeout(function() {window.location = '/rorders'}, 10000);
+        setTimeout(function() {window.location = '/rorders'}, 1000);
     }
     return (
 <div>
@@ -121,4 +130,7 @@ render() {
 //         description: state.orders.description
 //   })};
   
-export default withApollo(RHistoryCard);
+export default compose(
+    withApollo,
+    graphql(updateOrder, { name: "updateOrder" })   
+  )(RHistoryCard);

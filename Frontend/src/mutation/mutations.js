@@ -38,10 +38,18 @@ const editMenuItem = gql`
         }
     }
 `
-
+const updateOrder = gql`
+    mutation updateOrder($_id: String, $orderstatus: String, $ordermode:String){
+            updateOrder(_id: $_id, orderstatus: $orderstatus, ordermode: $ordermode){
+            message
+            status
+        }
+    }
+`
 export {
     loginMutation,
     editRprofile,
     addMenuItem,
-    editMenuItem
+    editMenuItem,
+    updateOrder
     };

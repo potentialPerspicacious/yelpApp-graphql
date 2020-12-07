@@ -51,18 +51,19 @@ class Menu extends Component {
                         menu_items: this.state.menu_items.concat(slice),
                         pageCount: Math.ceil(data.menu.dishes.length / this.state.perPage),
                     });
-        } else {
-            axios.get(`${backendServer}/menu/items/${localStorage.getItem("resID")}`)
-            .then(response => {
-                const slice = response.data.slice(this.state.offset, this.state.offset + this.state.perPage)
-                this.state.menu_items = []
-                this.setState({
-                    menu_items: this.state.menu_items.concat(slice),
-                    pageCount: Math.ceil(response.data.length / this.state.perPage),
-                });
-            })
-
-        }
+        } else   {
+            const { data } = await this.props.client.query({
+            query: getMenu,
+                variables: { id: localStorage.getItem("resID") },
+                fetchPolicy: 'network-only',
+          });
+          const slice = data.menu.dishes.slice(this.state.offset, this.state.offset + this.state.perPage)
+          this.state.menu_items = []
+          this.setState({
+                        menu_items: this.state.menu_items.concat(slice),
+                        pageCount: Math.ceil(data.menu.dishes.length / this.state.perPage),
+                    });
+                }
     };
     handlePageClick = (e) => {
         const selectedPage = e.selected;

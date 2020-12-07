@@ -177,6 +177,40 @@ const CustomerProfileType = new GraphQLObjectType({
 });
 
 
+const SearchRestaurantType = new GraphQLObjectType({
+    name: 'SearchRestaurant',
+    fields: () => ({
+        _id: { type: GraphQLID },
+        name: { type: GraphQLString },
+        email: { type: GraphQLString },
+        password: { type: GraphQLString },
+        city: { type: GraphQLString },
+        zipcode: { type: GraphQLString },
+        type: {type: GraphQLString},      
+        location: { type: GraphQLString },
+        contact: { type: GraphQLString },
+        cusine: { type: GraphQLString },
+        description: { type: GraphQLString },
+        timings: { type: GraphQLString },
+        dinein: { type: GraphQLString },
+        takeout: { type: GraphQLString },
+        ydelivery: { type: GraphQLString },
+    })
+});
+
+const SearchResult = new GraphQLObjectType({
+    name: 'Search',
+    fields: () => ({
+        restaurant: {
+            type: new GraphQLList(SearchRestaurantType),
+            resolve(parent, args) {
+                return parent;
+            }
+        }
+    })
+});
+
+
 const RootQuery = new graphql.GraphQLObjectType({
     name: "RootQueryType",
     fields: {
@@ -269,32 +303,21 @@ const RootQuery = new graphql.GraphQLObjectType({
             }
          },
          searchRestaurant :{
-            type: RestaurantType,
+            type: SearchResult,
             args: {name : {type: GraphQLString}, location: {type: GraphQLString}},
             async resolve(parent, args) {
                 let restaurant = await searchByName.find({name: args.name}, {profileInfo: 0, dishes: 0, events: 0, reviews:0})
-                let restaurantProfile = await searchByName.find({name: args.name}, {profileInfo: 1})
+                let restaurantProfile = await searchByName.find({name: args.name}, {dishes: 0, events: 0, reviews:0, _id: 0})
+                // console.log(restaurantProfile)
+                delete restaurantProfile[0]._doc.profileInfo._id
                 let mergeObj = Object.assign(restaurant[0]._doc, restaurantProfile[0]._doc.profileInfo)
-                console.log(mergeObj)
                 let arr = []
-                console.log(arr)
                 arr.push(mergeObj)
                 if (restaurant) {
                     return arr
                 }
             }
          },
-
-        //  getRestaurantProfile : {
-        //     type: RestaurantProfileType,
-        //     args: {id : {type: GraphQLString}},
-        //     async resolve(parent, args) {
-        //         let restaurantProfile = await searchByName.find({name: args.name}, {profileInfo: 1})
-        //         if (restaurantProfile) {
-        //             return restaurantProfile.profileInfo
-        //         }
-        //     }
-        //  },
 
 
     }

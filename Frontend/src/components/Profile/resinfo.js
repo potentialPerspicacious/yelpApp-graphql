@@ -44,14 +44,26 @@ class Resinfo extends Component {
         //             }); 
         //         })
         // }
-        const { data } = await this.props.client.query({
-            query: getRestaurantProfileBasic,
-                variables: { id: localStorage.getItem("user_id") },
-                fetchPolicy: 'network-only',
-          });
-        //   console.log(data)
-          this.setState({profileBasic: data.restaurant})
-          this.setState({profileAdv: data.restaurantProfile})
+        if (localStorage.getItem("type")==='restaurant'){
+            const { data } = await this.props.client.query({
+                query: getRestaurantProfileBasic,
+                    variables: { id: localStorage.getItem("user_id") },
+                    fetchPolicy: 'network-only',
+              });
+            //   console.log(data)
+              this.setState({profileBasic: data.restaurant})
+              this.setState({profileAdv: data.restaurantProfile})
+        } else {
+            const { data } = await this.props.client.query({
+                query: getRestaurantProfileBasic,
+                    variables: { id: localStorage.getItem("resID") },
+                    fetchPolicy: 'network-only',
+              });
+            //   console.log(data)
+              this.setState({profileBasic: data.restaurant})
+              this.setState({profileAdv: data.restaurantProfile})
+        }
+
 
 
         // if(this.props.data.loading === false){

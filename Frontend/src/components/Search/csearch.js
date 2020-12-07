@@ -52,7 +52,8 @@ class Csearch extends Component {
             variables: { name: localStorage.getItem("find")},
             fetchPolicy: 'network-only',
       });
-      console.log(data)
+      console.log((data.searchRestaurant.restaurant))
+      this.setState({restaurant_search:data.searchRestaurant.restaurant})
     }
 };
 restaurants = () => {

@@ -120,10 +120,20 @@ query($id: String){
 const getRestaurants = gql`
 query($name: String){
     searchRestaurant(name: $name){
+        restaurant{
         _id
         name
         zipcode
         city
+        location
+        contact
+        cusine
+        description
+        timings
+        dinein
+        takeout
+        ydelivery
+        }
     }
 
 }

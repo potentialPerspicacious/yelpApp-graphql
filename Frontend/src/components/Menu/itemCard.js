@@ -3,13 +3,11 @@ import { Card, Button, Col, Row } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {faEdit, faCartPlus} from "@fortawesome/free-solid-svg-icons";
-import axios from "axios";
-import backendServer from "../../webConfig"
-import { connect } from 'react-redux';
-import PropTypes from 'prop-types'
-import {addItemCart} from '../../actions/menu'
 import { withApollo } from 'react-apollo';
 import foodPlaceholder from './foodplaceholder.jpg'
+import { graphql } from 'react-apollo';
+import { addItemCart } from '../../mutation/mutations';
+import { compose } from 'recompose';
 
 class ItemCard extends Component {
   constructor(props) {
@@ -24,17 +22,38 @@ class ItemCard extends Component {
   setDishID = () => {
     localStorage.setItem("dishID", this.props.menu_item._id)
   }
-  addCart = () => {
+  addCart = async(e) => {
+    console.log(this.props.menu_item)
     localStorage.setItem("dishID", this.props.menu_item._id)
     localStorage.setItem("status", "item_present")
+    e.preventDefault();
+    let mutationResponse = await this.props.addItemCart({
+        variables: {
+            dishID: localStorage.getItem("dishID"),
+            dishName: this.props.menu_item.name,
+            resID: localStorage.getItem('resID'),
+            cusID: localStorage.getItem('user_id')
+        }
+    });
+    let response = mutationResponse.data.addItemCart;
+    console.log(response)
 
-    this.props.addItemCart()
-    // axios.post(`${backendServer}/customer/order/${localStorage.getItem("user_id")}/${localStorage.getItem("resID")}/${localStorage.getItem("dishID")}`)
-    //     .then(response => {
-    //             this.setState({
-    //                 status: (response.data)
-    //             });
-    //     })
+    if (response) {
+        console.log(response)
+        if (response.status === "200") {
+            this.setState({
+                success: true,
+                data: response.message,
+                loginFlag: true
+            });
+        } else {
+            console.log(response)
+            this.setState({
+                message: response.message,
+                loginFlag: true
+            });
+        }
+    }
   }
 
 
@@ -46,17 +65,11 @@ class ItemCard extends Component {
       </Link> )   } else {
         icon = <Button variant="link" onClick={this.addCart} name="edit"><FontAwesomeIcon style={{color:"black"}} icon={faCartPlus}/></Button>;
     }
-    // let message = this.props.description
+
     const success = {
         message: null
     }
-    var imageSrc;
-    if (this.state) {
-        imageSrc = `${backendServer}/images/item/${this.props.menu_item.image}`;
-    }
-    let details = this.state.dish;
-    // console.log(this.props.description)
-    if(this.props.description == 'ITEM_ADDED'){
+    if(this.state.data == 'ITEM_ADDED'){
         success.message = 'Item added to cart.'
         setTimeout(function() {window.location = '/restaurantPage'}, 500);
     }
@@ -78,7 +91,6 @@ class ItemCard extends Component {
           </Col>
           <Col align="right">
             {icon}
-            {/* <Button variant="link" onClick={this.props.deleteItem} name={this.props.menu_item.item_id}>Delete</Button> */}
           </Col>
         </Row>
       </Card>
@@ -90,14 +102,7 @@ class ItemCard extends Component {
   }
 }
 
-ItemCard.propTypes = {
-  addItemCart: PropTypes.func.isRequired,
-  description: PropTypes.object.isRequired
-}
-
-// const mapStateToProps = state => { 
-//   return ({
-//       description: state.menu.description
-// })};
-
-export default withApollo(ItemCard);
+export default compose(
+  withApollo,
+  graphql(addItemCart, { name: "addItemCart" })   
+)(ItemCard);

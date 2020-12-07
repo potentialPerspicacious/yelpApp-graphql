@@ -17,13 +17,8 @@ class Banner extends Component {
             banner = (
                 <div>
                 <div className="banner">
-                <Link to='/'><img src={logo} className="bannerlogo" alt="logo" /> </Link>
-                {/* <Link to="/login" onClick = {this.handleLogout}><a className='navtext'>Logout</a><span class="glyphicon glyphicon-user navicon"></span></Link> */}
-                
+                <Link to='/'><img src={logo} className="bannerlogo" alt="logo" /> </Link>                
                 </div>
-                {/* <div className="lgbanner">
-                <li><Link to="/login" onClick = {this.handleLogout}><a className='navtext'>Logout</a><span class="glyphicon glyphicon-user navicon"></span></Link></li>
-                </div> */}
                 </div>
             );
         }else{

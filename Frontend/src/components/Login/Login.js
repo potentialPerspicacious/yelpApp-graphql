@@ -6,44 +6,33 @@ import {Row, Col } from 'react-bootstrap';
 import Banner from '../Navigationbar/banner'
 import { graphql } from 'react-apollo';
 import { loginMutation } from '../../mutation/mutations';
-import * as jwt_decode from 'jwt-decode';
 
 
-
-
-//Define a Login Component
 class Login extends Component{
-    //call the constructor method
     constructor(props){
-        //Call the constrictor of Super class i.e The Component
         super(props);
-        //maintain the state required for this component
         this.state = {
             username : "",
             password : "",
             isOwner: "off",
             authFlag : false
         }
-        //Bind the handlers to this class
         this.usernameChangeHandler = this.usernameChangeHandler.bind(this);
         this.passwordChangeHandler = this.passwordChangeHandler.bind(this);
         this.isOwner = this.isOwner.bind(this);
 
         this.submitLogin = this.submitLogin.bind(this);
     }
-    //Call the Will Mount to set the auth Flag to false
     componentWillMount(){
         this.setState({
             authFlag : false
         })
     }
-    //username change handler to update state variable with the text entered by the user
     usernameChangeHandler = (e) => {
         this.setState({
             username : e.target.value
         })
     }
-    //password change handler to update state variable with the text entered by the user
     passwordChangeHandler = (e) => {
         this.setState({
             password : e.target.value
@@ -56,27 +45,9 @@ class Login extends Component{
         }) 
     
     }
-    //submit Login handler to send a request to the node backend
     submitLogin = async (e) => {
-        // var headers = new Headers();
-        // //prevent page from refresh
-        e.preventDefault();
-        // const data = {
-        //     username : this.state.username,
-        //     password : this.state.password, 
-        //     isOwner: this.state.isOwner
-        // }
-        // // console.log(data)
-        // this.props.userLogin(data);
-        // this.setState({
-        //     loginFlag: 1
-        // });
-        // this.setState({
-        //     username : this.state.username,
-        //     password : this.state.password, 
-        //     isOwner: this.state.isOwner
-        // })
 
+        e.preventDefault();
         let mutationResponse = await this.props.loginMutation({
             variables: {
                 email: this.state.username,
@@ -204,15 +175,3 @@ class Login extends Component{
 }
 
 export default graphql(loginMutation, { name: "loginMutation" })(Login);
-
-// Login.propTypes = {
-//     userLogin: PropTypes.func.isRequired,
-//     description: PropTypes.object.isRequired
-// }
-
-// const mapStateToProps = state => { 
-//     return ({
-//         description: state.login.description
-// })};
-
-// export default connect(mapStateToProps, { userLogin })(Login);

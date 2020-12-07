@@ -1,8 +1,7 @@
-import { faBuilding, faCar, faClock, faHourglass, faList, faShoppingBag } from "@fortawesome/free-solid-svg-icons";
+import { faCar, faHourglass, faList } from "@fortawesome/free-solid-svg-icons";
 import React, { Component, Item} from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Card, Row, Col } from "react-bootstrap";
-import backendServer from "../../webConfig"
 
 
 class HistoryCard extends Component {
@@ -22,17 +21,12 @@ render() {
   }
      </div>
 )
-  console.log(this.props.order_history)
-  var imageSrc;
-  if (this.props) {
-      imageSrc = `${backendServer}/images/restaurant/${this.props.order_history.image}`;
-  }
     return (
 <div>
 <Card bg="white" style={{ width: "50rem", margin: "2%", height:"15rem" }}>
         <Row>
           <Col xs="4.5">
-            <Card.Img style={{marginLeft:"4mm", width: "15rem", height: "15em" }} src={imageSrc} />
+            <Card.Img style={{marginLeft:"4mm", width: "15rem", height: "15em" }}  />
           </Col>
           <Col align="left" style={{marginLeft:"0mm"}}>
             <Card.Body>

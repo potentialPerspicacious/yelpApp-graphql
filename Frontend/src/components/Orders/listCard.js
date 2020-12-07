@@ -1,21 +1,16 @@
 import React, { Component} from "react";
 import { Card, Row, Col } from "react-bootstrap";
-import backendServer from "../../webConfig"
 
 
 
 class ListCard extends Component {
 render() {
-  var imageSrc;
-  if (this.props) {
-      imageSrc = `${backendServer}/images/item/${this.props.order_items.image}`;
-  }
     return (
 <div>
 <Card bg="white" style={{ width: "50rem", margin: "2%" }}>
         <Row>
           <Col>
-            <Card.Img style={{ width: "15rem", height: "16em" }} src={imageSrc} />
+            <Card.Img style={{ width: "15rem", height: "16em" }}/>
           </Col>
           <Col align="left" style={{marginLeft:"0mm"}}>
             <Card.Body>

@@ -17,16 +17,8 @@ import CusOrders from './Orders/corders';
 import CorderHistory from './Orders/orderhistory';
 import RorderHistory from './Orders/rorders';
 import Creview from './Reviews/creviews';
-import AddEvent from './Events/addevent';
 import Share from './Share/share';
-import Events from './Events/viewEvents';
-import CEvents from './Events/viewCevents'
-import RegisteredPeople from './Events/registeredPeople';
-import Maps from './Maps/maps';
-import YourEvents from './Events/yourevents'
-import SendMessages from './Messages/sendmessage'
-import ViewMessagesFrom from './Messages/customermessage'
-import CustomerReply from './Messages/customerReply'
+
 
 //Create a Main Component
 class Main extends Component {
@@ -51,16 +43,7 @@ class Main extends Component {
                 <Route exact path="/orderhistory" component={CorderHistory}/>
                 <Route exact path="/rorders" component={RorderHistory}/>
                 <Route exact path="/creviews" component={Creview}/>
-                <Route exact path="/addevent" component={AddEvent}/>
                 <Route exact path="/share" component={Share}/>
-                <Route exact path="/viewevents" component={Events}/>
-                <Route exact path="/viewcevents" component={CEvents}/>
-                <Route exact path="/registeredPeople" component={RegisteredPeople}/>
-                <Route exact path="/maps" component={Maps}/>
-                <Route exact path="/yourevents" component={YourEvents}/>
-                <Route exact path="/messageCustomer" component={SendMessages}/>
-                <Route exact path="/viewMessages" component={ViewMessagesFrom}/>
-                <Route exact path="/messageReply" component={CustomerReply}/>
 
 
 

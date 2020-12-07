@@ -4,7 +4,6 @@ import axios from 'axios';
 import Banner from '../Navigationbar/banner'
 import ImageUploader from 'react-images-upload';
 import {Button} from 'react-bootstrap'
-import backendServer from "../../webConfig"
 import { graphql } from 'react-apollo';
 import { editMenuItem } from '../../mutation/mutations';
 import {getDish} from '../../queries/queries'
@@ -46,15 +45,12 @@ componentWillMount = async () => {
             variables: { id: localStorage.getItem("dishID") },
             fetchPolicy: 'network-only',
       });
-    //   console.log(Object.keys(data.dish))
-    //   console.log(data.dish)
       this.setState({dish: data.dish})
         
 
 }
 
 updatedish = async(e) => {
-        //prevent page from refresh
         let details = this.state.dish
         e.preventDefault();
         let mutationResponse = await this.props.editMenuItem({
@@ -93,27 +89,6 @@ updatedish = async(e) => {
     
         });
     }
-    onUpload = (e) => {
-        e.preventDefault();
-        const formData = new FormData();
-        formData.append("image", this.state.pictures[0]);
-        const uploadConfig = {
-            headers: {
-                "content-type": "multipart/form-data"
-            }
-        };
-        axios.post(`${backendServer}/uploads/items/${localStorage.getItem("user_id")}`, formData, uploadConfig)
-            .then(response => {
-                alert("Image uploaded successfully!");
-                this.setState({
-                    fileText: "Choose file...",
-                    user_image: response.data
-                });
-            })
-            .catch(err => {
-                console.log("Error");
-            });
-    }
     render(){
         let message = this.state.data
         const error = {
@@ -140,7 +115,7 @@ updatedish = async(e) => {
                    </div>
                    <div class="form-group">
                        <label class="label-form"> Edit/Upload your dish image</label>
- <form onSubmit={this.onUpload}><br />
+ <form><br />
                                     <div class="custom-file" style={{width: "80%"}}>
                                     <ImageUploader
                 withIcon={true}

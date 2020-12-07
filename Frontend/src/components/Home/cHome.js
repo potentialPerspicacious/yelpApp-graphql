@@ -1,12 +1,8 @@
 import React, {Component} from 'react';
 import '../../App.css';
-import axios from 'axios';
 import cookie from 'react-cookies';
 import {Redirect} from 'react-router';
-import  Navbar  from '../Navigationbar/Navbar';
 import CusLP from '../Profile/cusLP'
-import logo from '../../images/logo.png';
-import {Link} from 'react-router-dom';
 
 
 class cHome extends Component {

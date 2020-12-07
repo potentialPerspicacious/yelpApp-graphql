@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import '../../App.css';
 import cookie from 'react-cookies';
-import {Redirect} from 'react-router';
 import axios from 'axios';
 import {Row, Col, Button} from 'react-bootstrap'
 import logo from '../../images/logo.png';
@@ -9,7 +8,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSearch, faNewspaper, faIdCard } from "@fortawesome/free-solid-svg-icons";
 import HistoryCard from './historycard'
 import Geocode from "react-geocode";
-import backendServer from "../../webConfig"
 import ReactPaginate from 'react-paginate';
 
 
@@ -35,27 +33,7 @@ class CorderHistory extends Component {
 
   getOrderHistory = () => {
     if(localStorage.getItem("filter") !=='no_filter'){
-        axios.get(`${backendServer}/customer/orderHistoryFilter/${localStorage.getItem("user_id")}/${localStorage.getItem("filter")}`)
-        .then(response => {
-                this.setState({
-                    order_history: this.state.order_history.concat(response.data),
-                    status: (response.data[0]),
-                    checked: (response.data[0])
-                })
-        })
-    } else {
-    axios.get(`${backendServer}/customer/orderHistory/${localStorage.getItem("user_id")}`, {
-        headers: { Authorization: `JWT ${cookie.load("token")}` }})
-    .then(response => {
-        console.log(response.data)
-        const slice = response.data.slice(this.state.offset, this.state.offset + this.state.perPage)
-        this.state.order_history = []
-        this.setState({
-            order_history: this.state.order_history.concat(slice),
-            pageCount: Math.ceil(response.data.length / this.state.perPage),
-            status: (response.data[0])
-        });
-    })
+    } else {  
 }
     }
     orderHistory = () => {

@@ -8,6 +8,25 @@ const loginMutation = gql`
         }
     }
 `
+const signupRes = gql`
+    mutation signupRes($email: String, $name: String, $zipcode: String, $password: String){
+        signupRes(email: $email, name: $name, zipcode: $zipcode, password: $password){
+            message
+            status
+        }
+    }
+`
+const signupCus = gql`
+    mutation signupCus($email: String, $fname: String, $zipcode: String, $lname: String, $password: String,
+        $date: String,  $month: String,  $date: month ){
+        signupCus(email: $email, fname: $fname,lname: $lname, zipcode: $zipcode, password: $password,
+            date: $date, month: $year, year: $year){
+            message
+            status
+        }
+    }
+`
+
 const editRprofile = gql`
     mutation editRprofile($_id: String, $email: String, $rname: String,  $zipcode: String, $location: String, $contact: String,
         $cusine: String, $description: String, $timings: String, $dinein: String, $takeout: String, $ydelivery: String ){
@@ -59,11 +78,35 @@ const editCprofile = gql`
         }
     }
 `
+
+const addItemCart = gql`
+    mutation addItemCart($dishID: String, $dishName: String, $resID: String, $cusID: String){
+        addItemCart(dishID: $dishID, dishName: $dishName, resID: $resID, cusID: $cusID){
+            message
+            status
+        }
+    }
+`
+
+const placeResOrder = gql`
+    mutation placeResOrder($ordermode: String, $resID: String, $cusID: String, $orderstatus: String){
+        placeResOrder(ordermode: $ordermode, resID: $resID, cusID: $cusID, orderstatus: $orderstatus){
+            message
+            status
+        }
+    }
+`
+
+
 export {
     loginMutation,
+    signupRes,
+    signupCus,
     editRprofile,
     addMenuItem,
     editMenuItem,
     updateOrder,
-    editCprofile
+    editCprofile,
+    addItemCart,
+    placeResOrder
     };

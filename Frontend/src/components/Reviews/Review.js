@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { Container, Alert } from "react-bootstrap";
 import axios from "axios";
 import ReviewCard from "./reviewCard";
-import backendServer from "../../webConfig"
 import { withApollo } from 'react-apollo';
 import {fetchReviews} from '../../queries/queries'
 
@@ -30,14 +29,6 @@ class Review extends Component {
               this.state.review_items = []
               this.setState({review_items: this.state.review_items.concat(data.review_list.reviews)})
         } else {
-            axios.get(`${backendServer}/restaurant/getReviews/${localStorage.getItem("resID")}`)
-            .then(response => {
-                    this.setState({
-                        review_items: this.state.review_items.concat(response.data),
-                        status: (response.data[0])
-
-                    });
-            })
 
         }
     };

@@ -5,7 +5,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {faCamera, faEdit, faIdCard, faPhoneAlt, faGenderless, faAddressCard, faBirthdayCake, faCity, faChartArea, faComment} from "@fortawesome/free-solid-svg-icons";
 import { CardImg, Card } from "react-bootstrap";
 import Banner from '../Navigationbar/banner';
-import backendServer from "../../webConfig"
 import {getCustomerProfileBasic} from '../../queries/queries'
 import {withApollo } from 'react-apollo';
 import userImage from './userplaceholder.png'
@@ -55,10 +54,6 @@ class Cusinfo extends Component {
     render(){
         let details = Object.assign(this.state.profileBasic, this.state.profileAdv)
         let edit = null
-        var imageSrc;
-        if (this.state) {
-            imageSrc = `${backendServer}/images/user/${details.img}`;
-        }
         if (localStorage.getItem("isOwner")=== "off") {
             edit =  (<li>
                 <a href='/editCprofile'>

@@ -3,9 +3,9 @@ import '../../App.css';
 import cookie from 'react-cookies';
 import {Redirect} from 'react-router';
 import Banner from '../Navigationbar/banner'
-import { connect } from 'react-redux';
-import PropTypes from 'prop-types'
-import {restaurantSignup} from '../../actions/signup'
+import { graphql } from 'react-apollo';
+import { signupRes } from '../../mutation/mutations';
+
 
 
 class SignupRestaurant extends Component {
@@ -21,20 +21,35 @@ class SignupRestaurant extends Component {
     }
 
 
-    submitLogin = (e) => {
-        //prevent page from refresh
+    submitLogin = async(e) => {
         e.preventDefault();
-        const data = {
-            rname: this.state.rname,
-            email: this.state.email,
-            password: this.state.password,
-            zipcode: this.state.zipcode
-        }
-        this.props.restaurantSignup(data);
-
-        this.setState({
-            signupFlag: 1
+        let mutationResponse = await this.props.signupRes({
+            variables: {
+                rname: this.state.rname,
+                email: this.state.email,
+                password: this.state.password,
+                zipcode: this.state.zipcode
+            }
         });
+        let response = mutationResponse.data.signupRes;
+        console.log(response)
+
+        if (response) {
+            console.log(response)
+            if (response.status === "200") {
+                this.setState({
+                    success: true,
+                    data: response.message,
+                    signupFlag: true
+                });
+            } else {
+                console.log(response)
+                this.setState({
+                    message: response.message,
+                    signupFlag: true
+                });
+            }
+        }
     }
 
     render(){
@@ -112,14 +127,5 @@ class SignupRestaurant extends Component {
     }
 }
 
-SignupRestaurant.propTypes = {
-    restaurantSignup: PropTypes.func.isRequired,
-    description: PropTypes.object.isRequired
 
-};
-
-const mapStateToProps = state => ({
-    description: state.signupRestaurant.description
-});
-
-export default connect(mapStateToProps, {restaurantSignup})(SignupRestaurant);
+export default graphql(signupRes, { name: "signupRes" })(SignupRestaurant);

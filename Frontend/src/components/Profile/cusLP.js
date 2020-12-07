@@ -1,12 +1,10 @@
 import React,{Component} from 'react';
 import cookie from 'react-cookies';
 import {Redirect} from 'react-router';
-import  Navbar  from '../Navigationbar/Navbar';
 import logo from '../../images/logo.png';
 import {Link} from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSearch, faIdCard, faSignOutAlt, faClock, faComment } from "@fortawesome/free-solid-svg-icons";
-import Geocode from "react-geocode";
  
 
 class CusLP extends Component {
@@ -38,18 +36,6 @@ class CusLP extends Component {
         localStorage.setItem("filter", "no_filter")
         localStorage.setItem("mapsFilter", "no_filter")
         localStorage.setItem("search", 'false')
-        // Geocode.setApiKey("AIzaSyBb6kf0iPAJGUKRKRW8bXU85u4RNuhSja0");     
-        // Geocode.setLanguage("en");
-        // Geocode.setRegion("en");
-        // Geocode.enableDebug();
-        // Geocode.fromAddress(this.state.location).then(
-        //     response => {
-        //       const { lat, lng } = response.results[0].geometry.location;
-        //       console.log(lat, lng)
-        //       localStorage.setItem('lat', lat)
-        //       localStorage.setItem('lng', lng)
-        //     },
-        //   );
         setTimeout(function() {window.location = '/csearch'}, 1500);
       }
     }

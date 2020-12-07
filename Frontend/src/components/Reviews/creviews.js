@@ -1,11 +1,7 @@
 import React, {Component} from 'react';
 import '../../App.css';
-import axios from 'axios';
 import Banner from '../Navigationbar/banner'
 import {Row, Col, Button} from 'react-bootstrap'
-import { connect } from 'react-redux';
-import PropTypes from 'prop-types'
-import {addReview} from '../../actions/reviews'
 
 
 
@@ -34,14 +30,7 @@ class Creview extends Component {
             reviews: this.state.reviews,
             rating: this.state.rating
         }
-        this.props.addReview(data)
-        // axios.post(`/restaurant/review/${localStorage.getItem("user_id")}/${localStorage.getItem("resID")}`, data)
-        //     .then(response => 
-        //         {this.setState({
-        //             status: (response.data) 
-                        
-        //             }); 
-        //         })
+
     }
 
     render (){
@@ -103,14 +92,5 @@ class Creview extends Component {
 }
 
 
-Creview.propTypes = {
-    addReview: PropTypes.func.isRequired,
-    description: PropTypes.object.isRequired
-  }
   
-  const mapStateToProps = state => { 
-    return ({
-        description: state.reviews.description
-  })};
-  
-  export default connect(mapStateToProps, { addReview })(Creview);
+  export default (Creview);

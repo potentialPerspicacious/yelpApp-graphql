@@ -1,15 +1,10 @@
 import React, {Component} from 'react';
 import '../../App.css';
-import cookie from 'react-cookies';
-import {Redirect} from 'react-router';
-import axios from 'axios';
 import {Row, Col, Button} from 'react-bootstrap'
 import logo from '../../images/logo.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSearch, faNewspaper, faIdCard } from "@fortawesome/free-solid-svg-icons";
 import ResCard from './resCard'
-import Maps from '../Maps/maps'
-import backendServer from "../../webConfig"
 import { withApollo } from 'react-apollo';
 import {getRestaurants} from '../../queries/queries'
 
@@ -32,21 +27,7 @@ class Csearch extends Component {
    getRestaurants = async() => {
 
     if(localStorage.getItem("filter") !=='no_filter'){
-        axios.get(`${backendServer}/search/restaurantsFilter/${localStorage.getItem("find")}/${localStorage.getItem("location")}/${localStorage.getItem("filter")}/${localStorage.getItem("search")}`)
-        .then(response => {
-                this.setState({
-                    restaurant_search: this.state.restaurant_search.concat(response.data),
-                    checked: (response.data[0].filter)
-                });
-        })
     } else {
-    // axios.get(`${backendServer}/search/restaurants/${localStorage.getItem("find")}/${localStorage.getItem("location")}/${localStorage.getItem("search")}`)
-    //     .then(response => {
-    //             this.setState({
-    //                 restaurant_search: this.state.restaurant_search.concat(response.data),
-
-    //             });
-    //     })
     const { data } = await this.props.client.query({
         query: getRestaurants,
             variables: { name: localStorage.getItem("find")},

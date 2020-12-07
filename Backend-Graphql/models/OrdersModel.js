@@ -3,7 +3,8 @@ const Schema = mongoose.Schema;
 
 var dish = new Schema({
     dishID: {type: String, required:true},
-    quantity: {type: Number, required:true}
+    quantity: {type: Number},
+    dishName:{type: String, required:true}
 },
     {
         versionKey: false
@@ -15,7 +16,8 @@ var Orders = new Schema({ resID: {type: String, required:true},
     orderstatus: {type: String},
     ordermode: {type: String},
     customerName: {type: String},
-     dishes: [dish]
+    dateTime: {type: mongoose.Schema.Types.Date, default: Date.now() },
+    dishes: [dish]
 },
 {
     versionKey: false

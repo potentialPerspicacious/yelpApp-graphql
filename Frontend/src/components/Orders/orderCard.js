@@ -1,14 +1,10 @@
 import React, { Component} from "react";
-import { Card, Button, Col, Row, ListGroupItem, ListGroup } from "react-bootstrap";
-import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {faEdit, faCartPlus, faCartArrowDown, faShoppingBag, faCar} from "@fortawesome/free-solid-svg-icons";
-import axios from "axios";
 import ListCard from  './listCard'
-import backendServer from "../../webConfig"
-import { connect } from 'react-redux';
-import PropTypes from 'prop-types'
-import {placeOrder, cancelOrder} from '../../actions/orders'
+import {placeResOrder} from '../../mutation/mutations'
+import { graphql } from 'react-apollo';
+
 
 
 class OrderCard extends Component {
@@ -27,15 +23,6 @@ class OrderCard extends Component {
 
 }
 getOrderedItems = () => {
-    axios.get(`${backendServer}/customer/OrderItems/${localStorage.getItem("user_id")}/${localStorage.getItem("resID")}`)
-    .then(response => {
-        localStorage.setItem("orderID",response.data.splice(0, 1))
-            this.setState({
-                order_items: this.state.order_items.concat(response.data),
-                status_message: (response.data),
-                // status_message2: (response.data[0].STATUS),
-            });
-    })
     }
     orderItems = () => {
         var itemsRender = [], items, item;
@@ -62,41 +49,44 @@ pickup = () => {
 delivery = () => {
     localStorage.setItem("ordermode", "delivery")
 }
-placeOrder = () => {
+placeOrder = async () => {
     localStorage.setItem("orderstatus", "New Order")
     localStorage.setItem("status", 'item_not_present')
-    this.props.placeOrder()
-    localStorage.removeItem("ordertype")
-    localStorage.removeItem("orderstatus")
+    let mutationResponse = await this.props.placeResOrder({
+        variables: {
+            resID: localStorage.getItem("resID"),
+            cusID: localStorage.getItem("user_id"),
+            ordermode: localStorage.getItem("ordermode"),
+            orderstatus: localStorage.getItem("orderstatus"),
+        }
+    });
+    let response = mutationResponse.data.placeResOrder;
+    console.log(response)
 
-    // axios.post(`${backendServer}/customer/placeOrder/${localStorage.getItem("user_id")}/${localStorage.getItem("resID")}/${localStorage.getItem("orderstatus")}/${localStorage.getItem("ordermode")}`)
-    // .then(response => {
-    //         this.setState({
-    //             status: (response.data)
-    //         });
-    // })
+    if (response) {
+        console.log(response)
+        if (response.status === "200") {
+            this.setState({
+                success: true,
+                data: response.message,
+                loginFlag: true
+            });
+        } else {
+            console.log(response)
+            this.setState({
+                message: response.message,
+                loginFlag: true
+            });
+        }
+    }
     }
 cancelOrder = () => {
     localStorage.removeItem("ordertype")
     localStorage.removeItem("orderstatus")
     localStorage.setItem("status", 'item_not_present')
     this.props.cancelOrder()
-    // axios.post(`${backendServer}/customer/cancelOrders/${localStorage.getItem("user_id")}/${localStorage.getItem("resID")}`)
-    // .then(response => {
-    //         this.setState({
-    //             status: (response.data)
-    //         });
-    // })
     }
 render (){
-    // let message2 = this.state.status_message
-    // let message3 = this.state.status_message2
-    // if(message2 == "ITEM_NOT_PRESENT"){
-    //     localStorage.setItem("status", 'item_not_present')
-    // }
-    // if(message3 == "ITEM_PRESENT"){
-    //     localStorage.setItem("status", 'item_present')
-    // }
     let section,
     renderOutput = [];
     console.log((this.state.orderID))
@@ -145,15 +135,5 @@ render (){
 }
 }
 
-OrderCard.propTypes = {
-    placeOrder: PropTypes.func.isRequired,
-    cancelOrder: PropTypes.func.isRequired,
-    description: PropTypes.object.isRequired
-  }
   
-  const mapStateToProps = state => { 
-    return ({
-        description: state.orders.description
-  })};
-  
-  export default connect(mapStateToProps, { placeOrder, cancelOrder })(OrderCard);
+export default graphql(placeResOrder, { name: "placeResOrder" })(OrderCard);

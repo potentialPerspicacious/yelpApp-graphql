@@ -3,14 +3,8 @@ import '../../App.css';
 import cookie from 'react-cookies';
 import {Redirect} from 'react-router';
 import Banner from '../Navigationbar/banner'
-import { connect } from 'react-redux';
-import PropTypes from 'prop-types'
 import ImageUploader from 'react-images-upload';
 import {Button} from 'react-bootstrap'
-import axios from 'axios';
-import backendServer from "../../webConfig"
-// import {addMenuItem} from '../../actions/menu'
-
 import { graphql } from 'react-apollo';
 import { addMenuItem } from '../../mutation/mutations';
 
@@ -34,7 +28,6 @@ class AddItem extends Component {
 
 
     addItem = async (e) => {
-        //prevent page from refresh
         e.preventDefault();
         let mutationResponse = await this.props.addMenuItem({
             variables: {
@@ -81,29 +74,6 @@ onImageChange = (e) => {
 
     });
 }
-onUpload = (e) => {
-    e.preventDefault();
-    const formData = new FormData();
-    formData.append("image", this.state.pictures[0]);
-    const uploadConfig = {
-        headers: {
-            "content-type": "multipart/form-data"
-        }
-    };
-    axios.post(`${backendServer}/uploads/items/${localStorage.getItem("dishID")}`, formData, uploadConfig, {
-        headers: { Authorization: `JWT ${cookie.load("token")}` }})
-        .then(response => {
-            localStorage.setItem("image", response.data)
-            alert("Image uploaded successfully!");
-            this.setState({
-                fileText: "Choose file...",
-                image: (response.data)
-            });
-        })
-        .catch(err => {
-            console.log("Error");
-        });
-}
 
     render(){
         console.log(this.state.data)
@@ -140,7 +110,7 @@ onUpload = (e) => {
                    <center>
                    <div class="form-group">
                        <label class="label-form"> Upload your dish image</label>
- <form onSubmit={this.onUpload}><br />
+ <form><br />
                                     <div class="custom-file" style={{width: "80%"}}>
                                     <ImageUploader
                 withIcon={true}
@@ -200,15 +170,5 @@ onUpload = (e) => {
     }
 }
 
-
-// AddItem.propTypes = {
-//     addMenuItem: PropTypes.func.isRequired,
-//     description: PropTypes.object.isRequired
-// }
-
-// const mapStateToProps = state => { 
-//     return ({
-//         description: state.menu.description
-// })};
 
 export default graphql(addMenuItem, { name: "addMenuItem" })(AddItem);

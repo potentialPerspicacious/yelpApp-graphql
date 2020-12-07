@@ -5,7 +5,7 @@ import  Navbar  from '../Navigationbar/Navbar';
 import logo from '../../images/logo.png';
 import {Link} from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faSearch, faBuilding, faSearchLocation } from "@fortawesome/free-solid-svg-icons";
+import { faSearch } from "@fortawesome/free-solid-svg-icons";
 
 
 class LandingPage extends Component {

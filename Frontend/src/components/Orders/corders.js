@@ -1,14 +1,10 @@
 import React, {Component} from 'react';
 import '../../App.css';
-import cookie from 'react-cookies';
-import {Redirect} from 'react-router';
-import axios from 'axios';
-import {Row, Col} from 'react-bootstrap'
+import {Col} from 'react-bootstrap'
 import logo from '../../images/logo.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSearch, faNewspaper, faIdCard } from "@fortawesome/free-solid-svg-icons";
 import OrderCard from './orderCard'
-import backendServer from "../../webConfig"
 
 
 class CusOrders extends Component {
@@ -26,14 +22,7 @@ class CusOrders extends Component {
 
 
 getOrderedItems = () => {
-axios.get(`${backendServer}/customer/OrderList/${localStorage.getItem("resID")}`,{
-    headers: { Authorization: `JWT ${cookie.load("token")}` }})
-.then(response => {
-        this.setState({
-            ordered_items: this.state.ordered_items.concat(response.data)
-        });
-        // console.log(removeDuplicates(ordered_items, item => (item.resID && item.cusID)));
-})
+
 }
 orders = () => {
     var itemsRender = [], items, item;
@@ -63,43 +52,6 @@ render (){
             <div>
            <div class='row' style={{ marginLeft:"10px", marginTop:"2cm"}}>
                    <Col xs="1.5mm">
-                {/* <div class='col-xs-3' style={{marginLeft: "10px", marginTop:"1cm"}}>
-                <h6 style={{color:'gray', fontWeight:"bold"}}> Filters</h6> <br />
-                        <h9 style={{color:'gray'}}> Order Type</h9>
-                        <hr />
-                    <p>
-                    <Row style={{marginLeft:"0mm"}}>
-                    <input onChange = {this.pickup} type="checkbox" name="pickup" placeholder="Curb Side Pickup" style={{marginTop: "1.5mm"}}/> 
-                    <p style={{marginTop:"0mm", marginLeft:"1mm"}}> Order Received </p>
-                    </Row>
-                    <Row style={{marginLeft:"0mm"}}>
-                    <input onChange = {this.dine} type="checkbox" name="dine" placeholder="Dine In" style={{marginTop: "1.5mm"}}/> 
-                    <p style={{marginTop:"0mm", marginLeft:"1mm"}}> Preparing </p>
-                    </Row>
-
-                    </p> </div>
-                    <div class='col-xs-3' style={{marginLeft: "10px", marginTop:"1cm"}}>
-                    <h9 style={{color:'gray'}}> Delivery Status</h9>
-                    <hr />
-                    <p>   
-                    <Row style={{marginLeft:"0mm"}}>
-                    <input onChange = {this.loc1} type="checkbox" name="pickup" placeholder="Curb Side Pickup" style={{marginTop: "1.5mm"}}/> 
-                    <p style={{marginTop:"0mm", marginLeft:"1mm"}}> On the Way </p>
-                    </Row>
-                    <Row style={{marginLeft:"0mm"}}>
-                    <input onChange = {this.loc2} type="checkbox" name="dine" placeholder="Dine In" style={{marginTop: "1.5mm"}}/> 
-                    <p style={{marginTop:"0mm", marginLeft:"1mm"}}> Delivered </p>
-                    </Row>
-                    <Row style={{marginLeft:"0mm"}}>
-                    <input onChange = {this.loc3} type="checkbox" name="delivery" placeholder="yelp delivery" style={{marginTop: "1.5mm"}}/> 
-                    <p style={{marginTop:"0mm", marginLeft:"1mm"}}> Pick up ready </p>
-                    </Row>
-                    <Row style={{marginLeft:"0mm"}}>
-                    <input onChange = {this.loc3} type="checkbox" name="delivery" placeholder="yelp delivery" style={{marginTop: "1.5mm"}}/> 
-                    <p style={{marginTop:"0mm", marginLeft:"1mm"}}> Picked up</p>
-                    </Row>
-                    </p>
-                </div> */}
                 </Col>
                 
                 <div class='col-xs-2' style={{textAlign: "left", height: "100%", borderLeft: "1px solid #e6e6e6", marginTop:"0.85cm", marginLeft: "1.2cm"}}>
@@ -116,43 +68,6 @@ render (){
         basket = (
         <div class='row' style={{ marginLeft:"10px", marginTop:"2cm"}}>
         <Col xs="1.5mm">
-     {/* <div class='col-xs-3' style={{marginLeft: "10px", marginTop:"1cm"}}>
-     <h6 style={{color:'gray', fontWeight:"bold"}}> Filters</h6> <br />
-                        <h9 style={{color:'gray'}}> Order Type</h9>
-                        <hr />
-         <p>
-         <Row style={{marginLeft:"0mm"}}>
-         <input onChange = {this.pickup} type="checkbox" name="pickup" placeholder="Curb Side Pickup" style={{marginTop: "1.5mm"}}/> 
-         <p style={{marginTop:"0mm", marginLeft:"1mm"}}> Order Received </p>
-         </Row>
-         <Row style={{marginLeft:"0mm"}}>
-         <input onChange = {this.dine} type="checkbox" name="dine" placeholder="Dine In" style={{marginTop: "1.5mm"}}/> 
-         <p style={{marginTop:"0mm", marginLeft:"1mm"}}> Preparing </p>
-         </Row>
-
-         </p> </div>
-         <div class='col-xs-3' style={{marginLeft: "10px", marginTop:"1cm"}}>
-         <h9 style={{color:'gray'}}> Delivery Status</h9>
-         <hr />
-         <p>   
-         <Row style={{marginLeft:"0mm"}}>
-         <input onChange = {this.loc1} type="checkbox" name="pickup" placeholder="Curb Side Pickup" style={{marginTop: "1.5mm"}}/> 
-         <p style={{marginTop:"0mm", marginLeft:"1mm"}}> On the Way </p>
-         </Row>
-         <Row style={{marginLeft:"0mm"}}>
-         <input onChange = {this.loc2} type="checkbox" name="dine" placeholder="Dine In" style={{marginTop: "1.5mm"}}/> 
-         <p style={{marginTop:"0mm", marginLeft:"1mm"}}> Delivered </p>
-         </Row>
-         <Row style={{marginLeft:"0mm"}}>
-         <input onChange = {this.loc3} type="checkbox" name="delivery" placeholder="yelp delivery" style={{marginTop: "1.5mm"}}/> 
-         <p style={{marginTop:"0mm", marginLeft:"1mm"}}> Pick up ready </p>
-         </Row>
-         <Row style={{marginLeft:"0mm"}}>
-         <input onChange = {this.loc3} type="checkbox" name="delivery" placeholder="yelp delivery" style={{marginTop: "1.5mm"}}/> 
-         <p style={{marginTop:"0mm", marginLeft:"1mm"}}> Picked up</p>
-         </Row>
-         </p>
-     </div> */}
      </Col>
      
      <div class='col-xs-2' style={{textAlign: "left", height: "100%", borderLeft: "1px solid #e6e6e6", marginTop:"0.85cm", marginLeft: "1.2cm"}}>

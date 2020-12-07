@@ -102,9 +102,6 @@ render() {
                </select>
               </span> </Card.Text>
               
-              {/* <Card.Text><FontAwesomeIcon icon={faList} /><span style={{fontWeight:"bold"}}> Ordered Item/s: </span> <span style={{textTransform: "uppercase"}}> <li>{this.props.order_history.dishes}</li></span></Card.Text> */}
-              {/* <Card.Text><FontAwesomeIcon icon={faClock} /><span style={{fontWeight:"bold"}}> Order Items: </span> <span style={{textTransform: "uppercase"}}> <i>{this.props.order_history.datetime}</i></span></Card.Text> */}
-
               <Row>
               <Button variant="outline-success" onClick={this.updateOrder}>Update Order</Button>
               <Button style={{marginLeft:"2cm"}}variant="outline-danger" onClick={this.updateOrder}>Cancel Order</Button>
@@ -120,16 +117,6 @@ render() {
 }
 
 }
-
-// RHistoryCard.propTypes = {
-//     updateRorder: PropTypes.func.isRequired,
-//     description: PropTypes.object.isRequired
-//   }
-  
-//   const mapStateToProps = state => { 
-//     return ({
-//         description: state.orders.description
-//   })};
   
 export default compose(
     withApollo,

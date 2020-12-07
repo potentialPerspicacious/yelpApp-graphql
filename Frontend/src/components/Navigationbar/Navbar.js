@@ -1,9 +1,6 @@
 import React,{Component} from 'react';
-import {Link} from 'react-router-dom';
 import cookie from 'react-cookies';
 import {Redirect} from 'react-router';
-// import { userLogout } from '../../actions/login'
-// import { connect } from 'react-redux';
 import logo from '../../images/logo.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCalendarPlus, faSignInAlt, faUserPlus } from "@fortawesome/free-solid-svg-icons";
@@ -12,20 +9,16 @@ import { faSearch, faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
 
 
 
-//create the Navbar Component
 class Navbar extends Component {
     constructor(props){
         super(props);
         this.handleLogout = this.handleLogout.bind(this);
     }
-    //handle logout to destroy the cookie
     handleLogout = () => {
         window.localStorage.clear();
         cookie.remove('cookie', { path: '/' });
-        // this.props.userLogout();
     }
     render(){
-        //if Cookie is set render Logout Button
         let navLogin = null;
         if(cookie.load('cookie')){
             navLogin = (
@@ -35,12 +28,10 @@ class Navbar extends Component {
                   <img src={logo} width="90" height="45" alt="logo"/>
               </a>
                        <div class="form-group col-md-3">
-                       {/* <FontAwesomeIcon icon={faBuilding} /> */}
                            <input onChange = {this.onChange} type="search" class="form-control hsearch" name="find" placeholder="Restaurant" style={{color:"black"}}/>
                        </div>
 
                        <div class="form-group col-md-3">
-                       {/* <FontAwesomeIcon icon={faSearchLocation} /> */}
                            <input onChange = {this.onChange}  type="search" class="form-control hsloc" name="location" placeholder="Location" style={{color:"black"}}/>
                        </div>
                        <div class="form-group col-md-1">

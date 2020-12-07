@@ -1,18 +1,16 @@
 import React, {Component} from 'react';
 import '../../App.css';
-import axios from 'axios';
-import {Link} from 'react-router-dom';
-import { UserProfileNavBar, UserProfileJumbo, NavList, Form, Button, MDBInput, Carousel, Row, Col} from 'react-bootstrap';
+import { Button, Carousel, Row} from 'react-bootstrap';
 import rest1 from '../../images/rest1.jpg'
 import rest2 from '../../images/rest2.jpg'
 import food1 from '../../images/food1.jpg'
 import food2 from '../../images/food2.jpg'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCalendarPlus ,faCartArrowDown, faUtensils, faCamera, faShareAlt, faMapMarkerAlt, faClock, faStar, faStarHalf, faPhoneAlt, faEnvelope, faCheck, faPlus, faEdit, faCross, faTimes, faCalendar, faCalendarAlt } from "@fortawesome/free-solid-svg-icons";
+import {faCartArrowDown, faUtensils, faShareAlt, faMapMarkerAlt, faClock, faStar, faPhoneAlt, faEnvelope, faCheck, faPlus, faEdit, faTimes, faCalendarAlt } from "@fortawesome/free-solid-svg-icons";
 import Menu from '../Menu/Menu'
 import Review from '../Reviews/Review'
 import {getRestaurantProfileBasic, getRestaurantProfileAdv} from '../../queries/queries'
-import { graphql, withApollo } from 'react-apollo';
+import { withApollo } from 'react-apollo';
 
 
 class Resinfo extends Component {
@@ -26,24 +24,6 @@ class Resinfo extends Component {
     }
     
     componentDidMount = async() => {
-        // if (localStorage.getItem("type")==='restaurant'){
-        //     axios.get(`/profile/restaurant/${localStorage.getItem("user_id")}`)
-        //     .then(response => 
-        //         {this.setState({
-        //             profileBasic: response.data,
-        //             profileAdv: response.data.profileInfo
-        //             }); 
-        //         })
-        // } else {
-        //     axios.get(`/profile/restaurant/${localStorage.getItem("resID")}`)
-        //     .then(response => 
-        //         {this.setState({
-        //             profileBasic: response.data,
-        //             profileAdv: response.data.profileInfo
-                        
-        //             }); 
-        //         })
-        // }
         if (localStorage.getItem("type")==='restaurant'){
             const { data } = await this.props.client.query({
                 query: getRestaurantProfileBasic,
@@ -65,38 +45,13 @@ class Resinfo extends Component {
         }
 
 
-
-        // if(this.props.data.loading === false){
-        //     this.setState({
-        //             profileBasic: this.props.data.restaurant,
-        //             profileAdv: this.props.data.restaurantProfile
-        //     })
-        // }
-
     }
     editProfile= () => {
         window.location = '/editProfile'
    }
 
     render(){
-        let restaurantBasic, restaurantAdv;
-        // if(!this.state.profileAdv){
-        //     return <div />
-        // }
-        // if(!this.state.profileBasic){
-        //     return <div />
-        // } else {
-        //     let basicDetails = this.state.profileBasic
-        //     // console.log(this.state.profileBasic)
-        //     let details = Object.assign(this.state.profileBasic, this.state.profileAdv)
-
-
-        // }
         let details = Object.assign(this.state.profileBasic, this.state.profileAdv)
-
-        
-        // console.log(this.state.profileBasic)
-
         let icon = null, 
         order = null,
         dservice = null,
@@ -203,18 +158,6 @@ if (localStorage.getItem("type")==="restaurant"){
                     </div>
                 </div>
                 </div>
-                       {/* <Col xs="6">
-        <Row><h3 style={{marginLeft:"0mm"}}> Menu </h3> {icon}</Row>
-                       <Menu />
-                       <h6> </h6>
-                       <br /> </Col>
-
-                       <br/>
-                       <hr />
-                       <Col xs="1">
-                       <h4> Review Hightlights</h4>
-                       <Review />
-                       <br /> </Col> */}
                    </div>
                    </div>
                 </div>
@@ -223,13 +166,3 @@ if (localStorage.getItem("type")==="restaurant"){
     }
     }
     export default withApollo(Resinfo);
-
-
-
-    // export default graphql(getRestaurantProfileBasic, {
-    //     options: {
-    //       variables: { id: localStorage.getItem("user_id") },
-    //       fetchPolicy: 'network-only',
-    //     }
-    //   },
-    // )(Resinfo);

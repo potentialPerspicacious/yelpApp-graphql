@@ -13,7 +13,10 @@ const {addItem} = require ('../mutations/addItem')
 const {editMenuItem} = require('../mutations/editItem')
 const {updateOrder} = require('../mutations/updateOrder')
 const {editCprofile} = require('../mutations/editCprofile');
-const { CONNREFUSED } = require('dns');
+const {addItemCart} = require ('../mutations/addItemCart')
+const {placeResOrder} = require('../mutations/placeResOrder');
+const{signupRes} = require ("../mutations/signupRestaurant")
+const {signupCus} = require ("../mutations/signupCustomer")
 
 const {
     GraphQLObjectType,
@@ -113,7 +116,14 @@ const OrderDetailsType = new GraphQLObjectType({
         cusID: { type: GraphQLString },
         ordermode: { type: GraphQLString },
         orderstatus: { type: GraphQLString },
-        customerName: { type: GraphQLString }
+        customerName: { type: GraphQLString },
+        dateTime: {type: GraphQLString},
+        dishesOrdered: {
+            type: new GraphQLList(OrderDishType),
+            resolve(parent, args) {
+                return parent.dishes;
+            }
+        }
     })
 });
 
@@ -183,7 +193,6 @@ const SearchRestaurantType = new GraphQLObjectType({
         _id: { type: GraphQLID },
         name: { type: GraphQLString },
         email: { type: GraphQLString },
-        password: { type: GraphQLString },
         city: { type: GraphQLString },
         zipcode: { type: GraphQLString },
         type: {type: GraphQLString},      
@@ -344,6 +353,36 @@ const Mutation = new GraphQLObjectType({
                 return login(args);
             }
         },
+        signupRes: {
+            type: StatusType,
+            args: {
+                email: { type: GraphQLString },
+                password: { type: GraphQLString },
+                zipcode: { type: GraphQLString },
+                name: { type: GraphQLString }
+            },
+            resolve(parent, args) {
+                return signupRes(args);
+            }
+        },
+        signupCus: {
+            type: StatusType,
+            args: {
+                email: { type: GraphQLString },
+                password: { type: GraphQLString },
+                zipcode: { type: GraphQLString },
+                fname: { type: GraphQLString },
+                lname: { type: GraphQLString },
+                month: { type: GraphQLString },
+                date: { type: GraphQLString },
+                year: { type: GraphQLString }
+            },
+            resolve(parent, args) {
+                return signupRes(args);
+            }
+        },
+        
+
         editRprofile: {
             type: StatusType,
             args: {
@@ -428,6 +467,32 @@ const Mutation = new GraphQLObjectType({
             },
             resolve(parent, args) {
                 return editCprofile(args);
+            }
+        },
+
+        addItemCart: {
+            type: StatusType,
+            args: {
+                dishID: { type: GraphQLString },
+                dishName: { type: GraphQLString },
+                resID: { type: GraphQLString },
+                cusID: { type: GraphQLString }
+            },
+            resolve(parent, args) {
+                return addItemCart(args);
+            }
+        },
+
+        placeResOrder: {
+            type: StatusType,
+            args: {
+                ordermode: { type: GraphQLString },
+                orderstatus: { type: GraphQLString },
+                resID: { type: GraphQLString },
+                cusID: { type: GraphQLString }
+            },
+            resolve(parent, args) {
+                return placeResOrder(args);
             }
         },
     }

@@ -1,14 +1,10 @@
 import React, {Component} from 'react';
 import '../../App.css';
-import cookie from 'react-cookies';
-import {Redirect} from 'react-router';
-import axios from 'axios';
 import {Row, Col, Button} from 'react-bootstrap'
 import logo from '../../images/logo.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSearch, faNewspaper, faIdCard, faWonSign, faCalendarPlus } from "@fortawesome/free-solid-svg-icons";
 import RHistoryCard from './rorderhistory'
-import backendServer from "../../webConfig"
 import ReactPaginate from 'react-paginate';
 import { withApollo } from 'react-apollo';
 import {getRorders} from '../../queries/queries'
@@ -36,16 +32,6 @@ class RorderHistory extends Component {
 
   getOrderHistory = async() => {
     if(localStorage.getItem("filter") ==='no_filter') {
-        // axios.get(`${backendServer}/restaurant/orderHistoryFilter/${localStorage.getItem("user_id")}/${localStorage.getItem("filter")}`, 
-        // {
-        //     headers: { Authorization: `JWT ${cookie.load("token")}` }})
-        // .then(response => {
-        //         this.setState({
-        //             order_history: this.state.order_history.concat(response.data),
-        //             status: (response.data[0]),
-        //             checked: (response.data[0])
-        //         });
-        // })
         const { data } = await this.props.client.query({
             query: getRorders,
                 variables: { id: localStorage.getItem("user_id") },
@@ -61,17 +47,6 @@ class RorderHistory extends Component {
                         status: "ITEM_PRESENT"
                     });
     } else {
-        axios.get(`${backendServer}/restaurant/orderHistory/${localStorage.getItem("user_id")}`,{
-            headers: { Authorization: `JWT ${cookie.load("token")}` }})
-        .then(response => {
-            const slice = response.data.slice(this.state.offset, this.state.offset + this.state.perPage)
-            this.state.order_history = []
-            this.setState({
-                order_history: this.state.order_history.concat(slice),
-                pageCount: Math.ceil(response.data.length / this.state.perPage),
-                status: (response.data[0])
-            });
-        })
 
     }
     }

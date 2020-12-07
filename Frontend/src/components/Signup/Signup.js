@@ -1,15 +1,10 @@
 import React, {Component} from 'react';
 import '../../App.css';
-import axios from 'axios';
 import cookie from 'react-cookies';
 import {Redirect} from 'react-router';
-import {Link} from 'react-router-dom';
-import { Grid, Row, Col } from 'react-bootstrap';
 import Banner from '../Navigationbar/banner'
-import {customerSignup} from '../../actions/signup'
-import { connect } from 'react-redux';
-import PropTypes from 'prop-types'
-
+import { graphql } from 'react-apollo';
+import { signupCus } from '../../mutation/mutations';
 
 
 class Signup extends Component {
@@ -25,26 +20,39 @@ class Signup extends Component {
     }
 
 
-    submitSignup = (e) => {
-        //prevent page from refresh
+    submitSignup = async (e) => {
         e.preventDefault();
-        const data = {
-            fname: this.state.fname,
-            lname: this.state.lname,
-            email: this.state.email,
-            password: this.state.password,
-            zipcode: this.state.zipcode,
-            email: this.state.email,
-            month: this.state.month,
-            date: this.state.date,
-            year: this.state.year
-        }
-        console.log(data)
-        this.props.customerSignup(data);
-
-        this.setState({
-            signupFlag: 1
+        let mutationResponse = await this.props.signupCus({
+            variables: {
+                fname: this.state.fname,
+                lname: this.state.lname,
+                email: this.state.email,
+                password: this.state.password,
+                zipcode: this.state.zipcode,
+                email: this.state.email,
+                month: this.state.month,
+                date: this.state.date,
+                year: this.state.year
+            }
         });
+        let response = mutationResponse.data.signupCus;
+
+        if (response) {
+            console.log(response)
+            if (response.status === "200") {
+                this.setState({
+                    success: true,
+                    data: response.message,
+                    signupFlag: true
+                });
+            } else {
+                console.log(response)
+                this.setState({
+                    message: response.message,
+                    signupFlag: true
+                });
+            }
+        }
     }
 
 
@@ -285,14 +293,5 @@ class Signup extends Component {
         )
     }
 }
-Signup.propTypes = {
-    customerSignup: PropTypes.func.isRequired,
-    description: PropTypes.object.isRequired
 
-};
-
-const mapStateToProps = state => ({
-    description: state.customersignup.description
-});
-
-export default connect(mapStateToProps, {customerSignup})(Signup);
+export default graphql(signupCus, { name: "signupCus" })(Signup);

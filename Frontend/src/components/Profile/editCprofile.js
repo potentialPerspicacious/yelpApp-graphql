@@ -1,10 +1,8 @@
 import React, {Component} from 'react';
 import '../../App.css';
-import axios from 'axios';
 import Banner from '../Navigationbar/banner'
 import {Button} from 'react-bootstrap'
 import ImageUploader from 'react-images-upload';
-import backendServer from "../../webConfig"
 import { graphql } from 'react-apollo';
 import { editCprofile } from '../../mutation/mutations';
 import {getCustomerProfileBasic} from '../../queries/queries'
@@ -49,28 +47,6 @@ onImageChange = (e) => {
         pictures: this.state.pictures.concat(e),
 
     });
-}
-
-onUpload = (e) => {
-    e.preventDefault();
-    const formData = new FormData();
-    formData.append("image", this.state.pictures[0]);
-    const uploadConfig = {
-        headers: {
-            "content-type": "multipart/form-data"
-        }
-    };
-    axios.post(`${backendServer}/uploads/user/${localStorage.getItem("user_id")}`, formData, uploadConfig)
-        .then(response => {
-            alert("Image uploaded successfully!");
-            this.setState({
-                fileText: "Choose file...",
-                user_image: response.data
-            });
-        })
-        .catch(err => {
-            console.log("Error");
-        });
 }
 
     updateProfile = async(e) => {
@@ -142,7 +118,7 @@ onUpload = (e) => {
         
                    <div class="form-group">
                        <label class="label-form"> Upload/Change your image</label>
- <form onSubmit={this.onUpload}><br />
+ <form ><br />
                                     <div class="custom-file" style={{width: "80%"}}>
                                     <ImageUploader
                 withIcon={true}
